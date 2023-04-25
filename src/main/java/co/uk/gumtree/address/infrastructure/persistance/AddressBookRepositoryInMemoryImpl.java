@@ -5,13 +5,13 @@ import co.uk.gumtree.address.domain.model.AddressBook;
 import co.uk.gumtree.address.domain.repository.AddressBookRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Slf4j
 public class AddressBookRepositoryInMemoryImpl implements AddressBookRepository {
-    private final Set<Address> addressBookEntries = new HashSet<>();
+    private final SortedSet<Address> addressBookEntries = new TreeSet<>();
 
     @Override
     public void store(Address address) {
@@ -28,5 +28,13 @@ public class AddressBookRepositoryInMemoryImpl implements AddressBookRepository 
         return addressBookEntries.stream()
                 .filter(a -> a.getFirstName().equals(firstName))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<Address> findAddressByAgeInAscendingOrder() {
+        if(!addressBookEntries.isEmpty()){
+            return Optional.of(addressBookEntries.first());
+        }
+        return Optional.empty();
     }
 }

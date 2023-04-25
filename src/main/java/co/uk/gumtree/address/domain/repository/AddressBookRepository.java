@@ -11,4 +11,6 @@ public interface AddressBookRepository {
     AddressBook getAddressBook();
 
     Optional<Address> findAddressByFirstName(String firstName);
+
+    Optional<Address> findAddressByAgeInAscendingOrder();
 }

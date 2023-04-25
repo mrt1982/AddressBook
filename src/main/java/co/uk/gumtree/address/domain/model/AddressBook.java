@@ -4,11 +4,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class AddressBook {
-   private final Set<Address> addressBook;
+   private final SortedSet<Address> addressBook;
 }

@@ -39,27 +39,34 @@ public class AddressBookLauncher {
     private static boolean options(Scanner console, AddressBookService addressBookService) {
         System.out.println("#### MENU ####");
         System.out.println("Do you want to exit? please enter 1");
-        System.out.println("How many males are in the address book? please enter 2");
-        System.out.println("Who is the oldest person in the address book?? please enter 3");
-        System.out.println("How many days older is Bill than Paul? please enter 4");
+        System.out.println("How many people are in the address book by gender? please enter 2");
+        System.out.println("Who is the oldest person in the address book? please enter 3");
+        System.out.println("How many days older is Person 1 than Person 2? please enter 4");
         System.out.println("#### MENU ####");
         int optionChoice = console.nextInt();
         if (optionChoice != 1) {
             if (optionChoice == 2) {
-                processHowManyPeopleByGender(addressBookService, Gender.MALE);
+                processHowManyPeopleByGender(addressBookService);
             }
             if (optionChoice == 3) {
                 processWhoIsTheOldestPerson(addressBookService);
             }
             if (optionChoice == 4) {
-                processAgeDifferenceBetweenPerson1AndPerson2(addressBookService, "Bill", "Paul");
+                processAgeDifferenceBetweenPerson1AndPerson2(addressBookService);
             }
         }
         return optionChoice == 1;
     }
 
-    private static void processAgeDifferenceBetweenPerson1AndPerson2(AddressBookService addressBookService, String person1FirstName, String person2FirstName) {
+    private static void processAgeDifferenceBetweenPerson1AndPerson2(AddressBookService addressBookService) {
         System.out.println("#### Option 4 ####");
+        Scanner console = new Scanner(System.in);
+        System.out.println("Please enter Person 1 first name ");
+        String person1FirstName = console.nextLine();
+        System.out.println("Person 1 First Name = " + person1FirstName);
+        System.out.println("Please enter Person 2 first name ");
+        String person2FirstName = console.nextLine();
+        System.out.println("Person 2 First Name = " + person2FirstName);
         try{
             Long ageDifferenceByDays = addressBookService.calculatePersonAgeDifference(person1FirstName, person2FirstName, ChronoUnit.DAYS);
             System.out.printf("Person 1 %s is =%s days older than Person 2 = %s%n", person1FirstName, ageDifferenceByDays, person2FirstName);
@@ -77,9 +84,14 @@ public class AddressBookLauncher {
         System.out.println("#### Option 3 ####");
     }
 
-    private static void processHowManyPeopleByGender(AddressBookService addressBookService, Gender gender) {
-        Long numberOfAddresses = addressBookService.calculateAddressesByGender(gender);
+    private static void processHowManyPeopleByGender(AddressBookService addressBookService) {
         System.out.println("#### Option 2 ####");
+        Scanner console = new Scanner(System.in);
+        System.out.println("Please enter Gender? Male or Female");
+        String genderType = console.nextLine();
+        System.out.println("Gender = " + genderType);
+        Gender gender = Gender.fromGenderName(genderType);
+        Long numberOfAddresses = addressBookService.calculateAddressesByGender(gender);
         System.out.printf("Number of people by gender %s is = %s%n", gender.getGenderName(), numberOfAddresses);
         System.out.println("#### Option 2 ####");
     }

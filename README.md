@@ -15,4 +15,4 @@ You will need maven and java 17 in order to run the interactive application.
     * Do you want to exit? please enter 1 
     * How many males are in the address book? please enter 2 
     * Who is the oldest person in the address book? please enter 3
-    * How many days older is Bill than Paul? please enter 4
+    * How many days older is Person 1 than Person 2? please enter 4

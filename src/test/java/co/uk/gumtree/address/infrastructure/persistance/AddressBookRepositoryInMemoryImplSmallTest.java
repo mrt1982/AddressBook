@@ -65,4 +65,22 @@ class AddressBookRepositoryInMemoryImplSmallTest {
         assertThat(actualAddressOpt.isEmpty(), is(equalTo(true)));
     }
 
+    @Test
+    void findAddressByAgeInAscendingOrder_addresses_returnOldestAddressByAge() {
+        Address address1 = new Address("firstName1", "surname1", Gender.MALE, LocalDate.of(1987, 10, 21));
+        Address address2 = new Address("firstName2", "surname2", Gender.MALE, LocalDate.of(1985, 8, 21));
+        testObj.store(address1);
+        testObj.store(address2);
+
+        Optional<Address> actualAddressOpt = testObj.findAddressByAgeInAscendingOrder();
+        assertThat(actualAddressOpt.isPresent(), is(equalTo(true)));
+        assertThat(actualAddressOpt.get().getFirstName(), is(equalTo("firstName2")));
+    }
+
+    @Test
+    void findAddressByAgeInAscendingOrder_emptyAddresses_returnEmptyAddress() {
+        Optional<Address> actualAddressOpt = testObj.findAddressByAgeInAscendingOrder();
+        assertThat(actualAddressOpt.isPresent(), is(equalTo(false)));
+    }
+
 }

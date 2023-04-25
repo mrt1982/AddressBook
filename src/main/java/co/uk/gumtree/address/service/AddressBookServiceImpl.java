@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.Optional;
 
 @Slf4j
@@ -32,9 +31,7 @@ public class AddressBookServiceImpl implements AddressBookService {
 
     @Override
     public Optional<Address> filterAddressesByOldestPerson() {
-        AddressBook addressBook = addressBookRepository.getAddressBook();
-        return addressBook.getAddressBook().stream()
-                .min(Comparator.comparing(Address::getDob));
+        return addressBookRepository.findAddressByAgeInAscendingOrder();
     }
 
     @Override

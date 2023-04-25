@@ -13,9 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AddressBookServiceImplSmallTest {
-    private static final Set<Address> ADDRESSES = createAddresses();
+    private static final SortedSet<Address> ADDRESSES = createAddresses();
 
     private static final AddressBook ADDRESS_BOOK = new AddressBook(ADDRESSES);
 
@@ -35,13 +36,13 @@ class AddressBookServiceImplSmallTest {
     @Mock
     private AddressBookRepository addressBookRepositoryMock;
 
-    private static Set<Address> createAddresses() {
+    private static SortedSet<Address> createAddresses() {
         Address addressMale1 = new Address("firstName1", "surname1", Gender.MALE, LocalDate.of(1982, 10, 21));
         Address addressMale2 = new Address("firstName2", "surname2", Gender.MALE, LocalDate.of(1983, 10, 21));
         Address addressFemale1 = new Address("firstName3", "surname3", Gender.FEMALE, LocalDate.of(1984, 10, 21));
         Address addressMale3 = new Address("firstName4", "surname4", Gender.MALE, LocalDate.of(1985, 10, 21));
         Address addressFemale2 = new Address("firstName5", "surname5", Gender.FEMALE, LocalDate.of(1986, 10, 21));
-        return Set.of(addressMale1, addressMale2, addressFemale1, addressMale3, addressFemale2);
+        return new TreeSet<>(Set.of(addressMale1, addressMale2, addressFemale1, addressMale3, addressFemale2));
     }
 
     @BeforeEach
@@ -72,14 +73,14 @@ class AddressBookServiceImplSmallTest {
 
     @Test
     void calculateAddressesByGender_emptyAddresses_returnZero() {
-        when(addressBookRepositoryMock.getAddressBook()).thenReturn(new AddressBook(new HashSet<>()));
+        when(addressBookRepositoryMock.getAddressBook()).thenReturn(new AddressBook(new TreeSet<>()));
         Long actualNumberOfAddresses = testObj.calculateAddressesByGender(Gender.MALE);
         assertThat(actualNumberOfAddresses, is(equalTo(0L)));
     }
 
     @Test
     void filterAddressByOldestPerson_validAddresses_returnAddressForOldestPerson() {
-        when(addressBookRepositoryMock.getAddressBook()).thenReturn(ADDRESS_BOOK);
+        when(addressBookRepositoryMock.findAddressByAgeInAscendingOrder()).thenReturn(Optional.of(new Address("firstName1", "surname1", Gender.MALE, LocalDate.of(1982, 10, 21))));
         Optional<Address> actualAddressOpt = testObj.filterAddressesByOldestPerson();
         assertThat(actualAddressOpt.isPresent(), is(equalTo(true)));
         assertThat(actualAddressOpt.get().getFirstName(), is(equalTo("firstName1")));
@@ -88,7 +89,7 @@ class AddressBookServiceImplSmallTest {
 
     @Test
     void filterAddressByOldestPerson_emptyAddresses_returnEmptyAddress() {
-        when(addressBookRepositoryMock.getAddressBook()).thenReturn(new AddressBook(new HashSet<>()));
+        when(addressBookRepositoryMock.findAddressByAgeInAscendingOrder()).thenReturn(Optional.empty());
         Optional<Address> actualAddressOpt = testObj.filterAddressesByOldestPerson();
         assertThat(actualAddressOpt.isPresent(), is(equalTo(false)));
     }
